@@ -39,3 +39,37 @@ class ParsedEvent(BaseModel):
     fields: dict[str, Any] = Field(default_factory=dict)
 
     warnings: list[str] = Field(default_factory=list)
+class DetectionResult(BaseModel):
+    """
+    Standard result produced by the AegisGuard
+    source/format detection stage.
+    """
+
+    vendor: str | None = None
+
+    product: str | None = None
+
+    event_family: str | None = None
+
+    format: str | None = None
+
+    parser_id: str | None = None
+
+    confidence: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+    )
+
+    evidence: list[str] = Field(default_factory=list)
+class ProcessingResult(BaseModel):
+    """
+    Complete result produced by the AegisGuard ULPF
+    processing pipeline before normalization.
+    """
+
+    raw_event: RawEvent
+
+    detection: DetectionResult
+
+    parsed_event: ParsedEvent
