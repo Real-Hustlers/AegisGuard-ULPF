@@ -1,0 +1,742 @@
+{
+  "$defs": {
+    "Actor": {
+      "additionalProperties": false,
+      "properties": {
+        "user": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "User"
+        }
+      },
+      "title": "Actor",
+      "type": "object"
+    },
+    "Device": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "hostname": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hostname"
+        },
+        "serial_number": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Serial Number"
+        },
+        "virtual_domain": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Virtual Domain"
+        },
+        "virtual_system": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Virtual System"
+        }
+      },
+      "title": "Device",
+      "type": "object"
+    },
+    "Endpoint": {
+      "additionalProperties": false,
+      "properties": {
+        "ip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ip"
+        },
+        "port": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Port"
+        },
+        "hostname": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hostname"
+        },
+        "interface": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interface"
+        },
+        "zone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zone"
+        }
+      },
+      "title": "Endpoint",
+      "type": "object"
+    },
+    "EventClassification": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "subtype": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subtype"
+        },
+        "outcome": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outcome"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Severity"
+        },
+        "action": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Action"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "title": "EventClassification",
+      "type": "object"
+    },
+    "EventResource": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        }
+      },
+      "title": "EventResource",
+      "type": "object"
+    },
+    "EventTimestamps": {
+      "additionalProperties": false,
+      "properties": {
+        "event_time": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Event Time"
+        },
+        "observed_time": {
+          "format": "date-time",
+          "title": "Observed Time",
+          "type": "string"
+        },
+        "processed_time": {
+          "format": "date-time",
+          "title": "Processed Time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "observed_time",
+        "processed_time"
+      ],
+      "title": "EventTimestamps",
+      "type": "object"
+    },
+    "Nat": {
+      "additionalProperties": false,
+      "properties": {
+        "translated_src_ip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Translated Src Ip"
+        },
+        "translated_src_port": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Translated Src Port"
+        },
+        "translated_dst_ip": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Translated Dst Ip"
+        },
+        "translated_dst_port": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Translated Dst Port"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "disposition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Disposition"
+        }
+      },
+      "title": "Nat",
+      "type": "object"
+    },
+    "Network": {
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Protocol"
+        },
+        "bytes_in": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bytes In"
+        },
+        "bytes_out": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bytes Out"
+        },
+        "bytes_total": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bytes Total"
+        },
+        "packets_in": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Packets In"
+        },
+        "packets_out": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Packets Out"
+        },
+        "packets_total": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Packets Total"
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Id"
+        },
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Seconds"
+        }
+      },
+      "title": "Network",
+      "type": "object"
+    },
+    "Policy": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Id"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "uuid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uuid"
+        }
+      },
+      "title": "Policy",
+      "type": "object"
+    },
+    "TraceabilityReferences": {
+      "additionalProperties": false,
+      "properties": {
+        "u_id": {
+          "title": "U Id",
+          "type": "string"
+        },
+        "raw_id": {
+          "title": "Raw Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "u_id",
+        "raw_id"
+      ],
+      "title": "TraceabilityReferences",
+      "type": "object"
+    },
+    "VendorInformation": {
+      "additionalProperties": false,
+      "properties": {
+        "vendor": {
+          "title": "Vendor",
+          "type": "string"
+        },
+        "product": {
+          "title": "Product",
+          "type": "string"
+        },
+        "vendor_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vendor Event Id"
+        }
+      },
+      "required": [
+        "vendor",
+        "product"
+      ],
+      "title": "VendorInformation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "mapping_status": {
+      "enum": [
+        "mapped",
+        "incomplete"
+      ],
+      "title": "Mapping Status",
+      "type": "string"
+    },
+    "classification": {
+      "$ref": "#/$defs/EventClassification"
+    },
+    "timestamps": {
+      "$ref": "#/$defs/EventTimestamps"
+    },
+    "vendor": {
+      "$ref": "#/$defs/VendorInformation"
+    },
+    "traceability": {
+      "$ref": "#/$defs/TraceabilityReferences"
+    },
+    "device": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Device"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "src_endpoint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Endpoint"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "dst_endpoint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Endpoint"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "network": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Network"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "actor": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Actor"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "policy": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Policy"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "nat": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Nat"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "resource": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EventResource"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "details": {
+      "additionalProperties": true,
+      "title": "Details",
+      "type": "object"
+    },
+    "vendor_fields": {
+      "additionalProperties": true,
+      "title": "Vendor Fields",
+      "type": "object"
+    }
+  },
+  "required": [
+    "mapping_status",
+    "classification",
+    "timestamps",
+    "vendor",
+    "traceability"
+  ],
+  "title": "CommonEvent",
+  "type": "object"
+}
