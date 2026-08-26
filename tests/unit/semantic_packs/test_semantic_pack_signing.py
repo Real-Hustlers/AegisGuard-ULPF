@@ -56,7 +56,7 @@ def test_pack_is_ed25519_signed():
     assert signature.status == "signed"
     assert signature.algorithm == "ed25519"
     assert signature.key_id == (
-        "aegisguard-dev-v1"
+        "aegisguard-dev-v2"
     )
 
     assert signature.value

@@ -4,7 +4,15 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    StrictInt,
     model_validator,
+)
+
+from aegisguard_ulpf.normalization.ocsf.registry import (
+    SeverityID,
+    StatusID,
+    VERIFIED_ACTIVITY_NAMES,
+    VERIFIED_CLASSES,
 )
 
 
@@ -272,10 +280,8 @@ class SemanticsSpec(FrozenPackModel):
 
 class OcsfBinding(FrozenPackModel):
     """
-    Structural placeholder only.
-
-    OCSF semantics remain owned by the existing
-    OCSF workstream.
+    Declarative binding from CommonEvent semantics to the
+    pinned OCSF registry.
     """
 
     status: Literal[
@@ -283,9 +289,95 @@ class OcsfBinding(FrozenPackModel):
         "bound",
     ]
 
-    mappings: dict[str, Any] = Field(
+    class_uid: StrictInt | None = None
+
+    activity_mappings: dict[str, StrictInt] = Field(
         default_factory=dict
     )
+
+    status_mappings: dict[str, StrictInt] = Field(
+        default_factory=dict
+    )
+
+    severity_mappings: dict[str, StrictInt] = Field(
+        default_factory=dict
+    )
+
+    default_severity_id: StrictInt | None = None
+
+    @model_validator(mode="after")
+    def validate_ocsf_binding(self):
+
+        has_ocsf_facts = any((
+            self.class_uid is not None,
+            self.activity_mappings,
+            self.status_mappings,
+            self.severity_mappings,
+            self.default_severity_id is not None,
+        ))
+
+        if self.status == "deferred":
+            if has_ocsf_facts:
+                raise ValueError(
+                    "Deferred OCSF binding must not contain OCSF facts"
+                )
+            return self
+
+        if self.class_uid not in VERIFIED_CLASSES:
+            raise ValueError(
+                "Bound OCSF binding class_uid is not supported by the "
+                "verified OCSF registry"
+            )
+
+        if not self.activity_mappings:
+            raise ValueError(
+                "Bound OCSF binding requires activity_mappings"
+            )
+
+        legal_activity_ids = VERIFIED_ACTIVITY_NAMES.get(
+            self.class_uid,
+            {},
+        )
+        for semantic_value, activity_id in self.activity_mappings.items():
+            if not semantic_value:
+                raise ValueError(
+                    "OCSF activity mapping semantic value must not be empty"
+                )
+            if activity_id not in legal_activity_ids:
+                raise ValueError(
+                    f"OCSF activity_id {activity_id} is not legal for "
+                    f"class_uid {self.class_uid}"
+                )
+
+        legal_status_ids = {member.value for member in StatusID}
+        for semantic_value, status_id in self.status_mappings.items():
+            if not semantic_value:
+                raise ValueError(
+                    "OCSF status mapping semantic value must not be empty"
+                )
+            if status_id not in legal_status_ids:
+                raise ValueError(
+                    f"Unsupported OCSF status_id: {status_id}"
+                )
+
+        legal_severity_ids = {member.value for member in SeverityID}
+        for semantic_value, severity_id in self.severity_mappings.items():
+            if not semantic_value:
+                raise ValueError(
+                    "OCSF severity mapping semantic value must not be empty"
+                )
+            if severity_id not in legal_severity_ids:
+                raise ValueError(
+                    f"Unsupported OCSF severity_id: {severity_id}"
+                )
+
+        if self.default_severity_id not in legal_severity_ids:
+            raise ValueError(
+                "Bound OCSF binding requires a supported "
+                "default_severity_id"
+            )
+
+        return self
 
 
 class EmbeddedPackTest(FrozenPackModel):

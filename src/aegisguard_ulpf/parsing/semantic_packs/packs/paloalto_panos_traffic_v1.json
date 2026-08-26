@@ -10,8 +10,8 @@
     "signature": {
       "status": "signed",
       "algorithm": "ed25519",
-      "key_id": "aegisguard-dev-v1",
-      "value": "oWz8rRD90gJeGBCoXclnI8EnrAEkIzzx7hOLTgku7qfb+cg6TiYvzPLNjkuzz2nPmKEYUZs7tM87MHwAemdmDA=="
+      "key_id": "aegisguard-dev-v2",
+      "value": "K6BRVWGD3FU8qq7QuB3xj1Ler9R+RQsLmQp0vJAhpxb+kBLOOlAF7ZRDD8qGIfsD+1nVzYbpKVtnZaAErWRNDQ=="
     }
   },
   "syntax": {
@@ -631,8 +631,20 @@
     "preserve_vendor_fields": true
   },
   "ocsf_binding": {
-    "status": "deferred",
-    "mappings": {}
+    "status": "bound",
+    "class_uid": 4001,
+    "activity_mappings": {
+      "SESSION": 6,
+      "POLICY": 6,
+      "UNKNOWN": 0
+    },
+    "status_mappings": {
+      "SUCCESS": 1,
+      "FAILURE": 2,
+      "UNKNOWN": 0
+    },
+    "severity_mappings": {},
+    "default_severity_id": 0
   },
   "tests": [
     {
@@ -672,7 +684,7 @@
     "source": "AegisGuard-ULPF existing PAN-OS Traffic parser",
     "derived_from": "src/aegisguard_ulpf/parsing/vendors/palaalto/panos/traffic.py",
     "created_for": "Semantic Pack Runtime v1 equivalence proof",
-    "notes": "Declarative representation of the existing PAN-OS Traffic legacy semantic output. OCSF binding and real digital signing are intentionally deferred."
+    "notes": "Declarative representation of the existing PAN-OS Traffic legacy semantic output with a verified OCSF Network Activity binding."
   },
   "sensitivity": null
 }

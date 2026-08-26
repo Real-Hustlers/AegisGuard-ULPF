@@ -14,6 +14,9 @@ from pydantic import ValidationError
 from aegisguard_ulpf.normalization.engine import (
     NormalizationEngine,
 )
+from aegisguard_ulpf.normalization.ocsf.mapper import (
+    map_common_event_to_ocsf,
+)
 
 from aegisguard_ulpf.parsing.semantic_packs.loader import (
     load_semantic_pack,
@@ -289,12 +292,21 @@ def test_pack_provenance_exists(pack):
 def test_pack_ocsf_binding_is_honest(pack):
     assert (
         pack.ocsf_binding.status
-        == "deferred"
+        == "bound"
     )
 
     assert (
-        pack.ocsf_binding.mappings
-        == {}
+        pack.ocsf_binding.class_uid
+        == 4001
+    )
+
+    assert (
+        pack.ocsf_binding.activity_mappings
+        == {
+            "SESSION": 6,
+            "POLICY": 6,
+            "UNKNOWN": 0,
+        }
     )
 
 
@@ -312,7 +324,7 @@ def test_pack_signature_state_is_honest(pack):
 
     assert (
         signature.key_id
-        == "aegisguard-dev-v1"
+        == "aegisguard-dev-v2"
     )
 
     assert signature.value
@@ -609,6 +621,42 @@ def test_common_event_equivalence(runtime):
         pack_common.model_dump()
         == python_common.model_dump()
     )
+
+
+def test_pack_binds_common_event_to_ocsf(runtime):
+    common_event = NormalizationEngine().normalize(
+        runtime.run(
+            build_panos_traffic_log(),
+            raw_id="RAW-OCSF-001",
+            u_id="UEV-OCSF-001",
+        ),
+        observed_time=datetime(
+            2026, 8, 26, 18, 0, tzinfo=timezone.utc
+        ),
+        processed_time=datetime(
+            2026, 8, 26, 18, 0, 1, tzinfo=timezone.utc
+        ),
+    )
+
+    first = map_common_event_to_ocsf(
+        common_event,
+        runtime.pack.ocsf_binding,
+    )
+    second = map_common_event_to_ocsf(
+        common_event,
+        runtime.pack.ocsf_binding,
+    )
+
+    assert first == second
+    assert first["class_uid"] == 4001
+    assert first["category_uid"] == 4
+    assert first["type_uid"] == 400106
+    assert first["activity_id"] == 6
+    assert first["status_id"] == 1
+    assert first["raw_data"] == {
+        "u_id": "UEV-OCSF-001",
+        "raw_id": "RAW-OCSF-001",
+    }
 
 
 def test_appended_unknown_fields_preserved(
