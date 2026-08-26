@@ -12,7 +12,18 @@ MappingStatus = Literal[
 
 
 class RawEvent(BaseModel):
-    event_id: UUID = Field(
+    """
+    Raw event presented to detection/parsing.
+
+    Direct RawEvent(raw=...) construction remains supported
+    for legacy parser/tests.
+
+    Authoritative forensic ingestion should construct this
+    through ProcessingPipeline.process_bytes(), which supplies
+    deterministic traceability identifiers from RawEvidenceStore.
+    """
+
+    event_id: UUID | str = Field(
         default_factory=uuid4
     )
 
@@ -30,11 +41,24 @@ class RawEvent(BaseModel):
         default_factory=dict
     )
 
+    evidence_raw_id: str | None = None
+    raw_sha256: str | None = None
+
     @property
     def raw_id(self) -> str:
+        if self.evidence_raw_id is not None:
+            return self.evidence_raw_id
+
         return f"RAW-{self.event_id}"
 
-
+    @property
+    def is_forensically_traceable(self) -> bool:
+        return (
+            isinstance(self.event_id, str)
+            and self.event_id.startswith("EVT-")
+            and self.evidence_raw_id is not None
+            and self.raw_sha256 is not None
+        )
 class ParserMetadata(BaseModel):
     parser_id: str
     parser_version: str
