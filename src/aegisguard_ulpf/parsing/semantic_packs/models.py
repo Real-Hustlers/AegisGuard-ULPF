@@ -1,3 +1,5 @@
+import re
+
 from typing import Any, Literal
 
 from pydantic import (
@@ -405,10 +407,52 @@ class ProvenanceMetadata(FrozenPackModel):
     notes: str
 
 
-class SensitivityMetadata(FrozenPackModel):
-    classification: str | None = None
+SensitivityClassification = Literal[
+    "normal",
+    "network_identifier",
+    "personal_identifier",
+    "credential",
+    "secret",
+    "potentially_sensitive",
+]
 
-    fields: tuple[str, ...] = ()
+
+_FIELD_PATH_PATTERN = re.compile(
+    r"^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$"
+)
+
+_PROTECTED_SENSITIVITY_PATHS = frozenset({
+    "traceability.u_id",
+    "traceability.raw_id",
+    "mapping_status",
+})
+
+
+class SensitivityField(FrozenPackModel):
+    field_path: str = Field(min_length=1)
+    semantic_role: str = Field(min_length=1)
+    classification: SensitivityClassification
+
+    @model_validator(mode="after")
+    def validate_sensitivity_field(self):
+        if not _FIELD_PATH_PATTERN.fullmatch(self.field_path):
+            raise ValueError("Sensitivity field_path is malformed")
+        if not self.semantic_role.strip():
+            raise ValueError("Sensitivity semantic_role must not be empty")
+        if self.field_path in _PROTECTED_SENSITIVITY_PATHS:
+            raise ValueError("Sensitivity field_path targets a protected field")
+        return self
+
+
+class SensitivityMetadata(FrozenPackModel):
+    fields: tuple[SensitivityField, ...] = ()
+
+    @model_validator(mode="after")
+    def validate_sensitivity_fields(self):
+        field_paths = [field.field_path for field in self.fields]
+        if len(field_paths) != len(set(field_paths)):
+            raise ValueError("Sensitivity field_path declarations must be unique")
+        return self
 
 
 class SemanticPack(FrozenPackModel):

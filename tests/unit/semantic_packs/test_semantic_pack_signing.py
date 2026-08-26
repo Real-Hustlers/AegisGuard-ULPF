@@ -30,6 +30,15 @@ PACK_PATH = (
     / "paloalto_panos_traffic_v1.json"
 )
 
+TRUSTED_KEYS_PATH = (
+    PROJECT_ROOT
+    / "src"
+    / "aegisguard_ulpf"
+    / "parsing"
+    / "semantic_packs"
+    / "trusted_keys"
+)
+
 
 def test_signed_pack_loads_and_verifies():
     pack = load_semantic_pack(
@@ -56,10 +65,27 @@ def test_pack_is_ed25519_signed():
     assert signature.status == "signed"
     assert signature.algorithm == "ed25519"
     assert signature.key_id == (
-        "aegisguard-dev-v2"
+        "aegisguard-dev-v3"
     )
 
     assert signature.value
+
+
+def test_existing_v1_and_v2_trust_anchors_are_unchanged():
+    assert (
+        TRUSTED_KEYS_PATH / "aegisguard-dev-v1.pem"
+    ).read_text(encoding="utf-8") == (
+        "-----BEGIN PUBLIC KEY-----\n"
+        "MCowBQYDK2VwAyEAX9Y8KeJb4TXDPFA9E7deqmbtbZvO9G0xtP4tJHhOgx4=\n"
+        "-----END PUBLIC KEY-----\n"
+    )
+    assert (
+        TRUSTED_KEYS_PATH / "aegisguard-dev-v2.pem"
+    ).read_text(encoding="utf-8") == (
+        "-----BEGIN PUBLIC KEY-----\n"
+        "MCowBQYDK2VwAyEA+Apsmx6otyJ8HuJuJVHqvbpQcT4lj58kMtE8aRbIN7Y=\n"
+        "-----END PUBLIC KEY-----\n"
+    )
 
 
 def test_tampered_pack_is_rejected(
