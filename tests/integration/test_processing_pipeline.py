@@ -157,21 +157,72 @@ def test_pipeline_detection_can_be_called_separately():
     )
 
 
-def test_pipeline_unknown_source_fails_cleanly():
+def test_pipeline_unknown_source_uses_tier0_fallback():
 
     pipeline = create_pipeline()
 
-    event = RawEvent(
-        raw=(
-            "some unknown application "
-            "started successfully"
-        )
+    raw = (
+        "some unsupported application "
+        "started successfully"
     )
 
-    with pytest.raises(
-        ParserNotFoundError
-    ):
-        pipeline.process(event)
+    event = RawEvent(
+        raw=raw
+    )
+
+    result = pipeline.process(
+        event
+    )
+
+    assert isinstance(
+        result,
+        ProcessingResult,
+    )
+
+    assert (
+        result.detection.parser_id
+        is None
+    )
+
+    assert (
+        result.parsed_event.parser.parser_id
+        == "aegisguard.tier0.structural"
+    )
+
+    assert (
+        result.parsed_event.fields[
+            "mapping_status"
+        ]
+        == "incomplete"
+    )
+
+    assert (
+        result.parsed_event.fields[
+            "category"
+        ]
+        is None
+    )
+
+    assert (
+        result.parsed_event.fields[
+            "type"
+        ]
+        is None
+    )
+
+    assert (
+        result.parsed_event.fields[
+            "vendor_fields"
+        ][
+            "text"
+        ]
+        == raw
+    )
+
+    assert (
+        result.raw_event.raw
+        == raw
+    )
 
 
 def test_pipeline_detected_parser_missing_from_registry():

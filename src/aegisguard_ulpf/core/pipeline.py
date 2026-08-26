@@ -8,6 +8,9 @@ from aegisguard_ulpf.core.models import (
     ProcessingResult,
     RawEvent,
 )
+from aegisguard_ulpf.fallback.tier0 import (
+    Tier0Fallback,
+)
 from aegisguard_ulpf.detection.engine import DetectionEngine
 from aegisguard_ulpf.parsing.registry import ParserRegistry
 from aegisguard_ulpf.traceability.raw_store import RawEvidenceStore
@@ -36,12 +39,18 @@ class ProcessingPipeline:
         self,
         registry: ParserRegistry,
         detection_engine: DetectionEngine | None = None,
+        tier0_fallback: Tier0Fallback | None = None,
     ) -> None:
         self.registry = registry
 
         self.detection_engine = (
             detection_engine
             or DetectionEngine()
+        )
+
+        self.tier0_fallback = (
+            tier0_fallback
+            or Tier0Fallback()
         )
 
     def detect(
@@ -61,18 +70,27 @@ class ProcessingPipeline:
         )
 
         if detection.parser_id is None:
-            raise ParserNotFoundError(
-                "Detection completed but no parser_id "
-                "could be selected for the event."
+
+            parsed_event = (
+                self.tier0_fallback.parse(
+                    event,
+                    detection,
+                )
             )
 
-        parser = self.registry.get(
-            detection.parser_id
-        )
+        else:
 
-        parsed_event = parser.parse(
-            event
-        )
+            # If detection explicitly selected a parser but
+            # deployment/registry does not contain it, that is
+            # a configuration error rather than an unsupported
+            # source. Preserve the existing exception behavior.
+            parser = self.registry.get(
+                detection.parser_id
+            )
+
+            parsed_event = parser.parse(
+                event
+            )
 
         # Central traceability authority.
         #
