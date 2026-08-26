@@ -1,0 +1,678 @@
+{
+  "manifest": {
+    "pack_id": "paloalto.panos.traffic",
+    "pack_version": "1.0.0",
+    "schema_version": "aegisguard-common-event-v1",
+    "vendor": "Palo Alto Networks",
+    "product": "PAN-OS",
+    "event_family": "traffic",
+    "format_version": "panos-traffic-csv-v1",
+    "signature": {
+      "status": "signed",
+      "algorithm": "ed25519",
+      "key_id": "aegisguard-dev-v1",
+      "value": "oWz8rRD90gJeGBCoXclnI8EnrAEkIzzx7hOLTgku7qfb+cg6TiYvzPLNjkuzz2nPmKEYUZs7tM87MHwAemdmDA=="
+    }
+  },
+  "syntax": {
+    "input_format": "csv",
+    "payload_marker": "1,",
+    "field_names": [
+      "future_use_1",
+      "receive_time",
+      "serial",
+      "type",
+      "subtype",
+      "config_version",
+      "time_generated",
+      "src",
+      "dst",
+      "natsrc",
+      "natdst",
+      "rule",
+      "srcuser",
+      "dstuser",
+      "app",
+      "vsys",
+      "from_zone",
+      "to_zone",
+      "inbound_if",
+      "outbound_if",
+      "logset",
+      "future_use_2",
+      "sessionid",
+      "repeatcnt",
+      "sport",
+      "dport",
+      "natsport",
+      "natdport",
+      "flags",
+      "proto",
+      "action",
+      "bytes",
+      "bytes_sent",
+      "bytes_received",
+      "packets",
+      "start",
+      "elapsed",
+      "category",
+      "future_use_3",
+      "seqno",
+      "actionflags",
+      "srcloc",
+      "dstloc",
+      "future_use_4",
+      "pkts_sent",
+      "pkts_received",
+      "session_end_reason",
+      "dg_hier_level_1",
+      "dg_hier_level_2",
+      "dg_hier_level_3",
+      "dg_hier_level_4",
+      "vsys_name",
+      "device_name",
+      "action_source",
+      "src_uuid",
+      "dst_uuid",
+      "tunnel_id_imsi",
+      "monitor_tag_imei",
+      "parent_session_id",
+      "parent_start_time",
+      "tunnel_type",
+      "sctp_association_id",
+      "sctp_chunks",
+      "sctp_chunks_sent",
+      "sctp_chunks_received",
+      "rule_uuid",
+      "http2_connection",
+      "app_flap_count",
+      "policy_id"
+    ],
+    "preserve_extra_fields": true,
+    "required_field": "type",
+    "required_value": "TRAFFIC",
+    "null_values": [
+      "",
+      "n/a",
+      "na",
+      "none",
+      "null",
+      "-"
+    ]
+  },
+  "semantics": {
+    "classification": {
+      "source_field": "subtype",
+      "action_field": "action",
+      "category": "TRAFFIC",
+      "default_type": "UNKNOWN",
+      "default_subtype": "UNKNOWN",
+      "default_outcome": "UNKNOWN",
+      "rules": {
+        "start": {
+          "type": "SESSION",
+          "subtype": "SESSION_START",
+          "outcome": null,
+          "outcome_from_action": true
+        },
+        "end": {
+          "type": "SESSION",
+          "subtype": "SESSION_END",
+          "outcome": null,
+          "outcome_from_action": true
+        },
+        "drop": {
+          "type": "POLICY",
+          "subtype": "TRAFFIC_DROP",
+          "outcome": "FAILURE",
+          "outcome_from_action": false
+        },
+        "deny": {
+          "type": "POLICY",
+          "subtype": "TRAFFIC_DENY",
+          "outcome": "FAILURE",
+          "outcome_from_action": false
+        }
+      },
+      "action_outcomes": {
+        "allow": "SUCCESS",
+        "deny": "FAILURE",
+        "drop": "FAILURE",
+        "reset-client": "FAILURE",
+        "reset-server": "FAILURE",
+        "reset-both": "FAILURE",
+        "block-url": "FAILURE",
+        "block-continue": "FAILURE",
+        "block-override": "FAILURE"
+      }
+    },
+    "operations": [
+      {
+        "op": "constant",
+        "target": "vendor",
+        "source": null,
+        "sources": [],
+        "value": "Palo Alto Networks",
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "constant",
+        "target": "product",
+        "source": null,
+        "sources": [],
+        "value": "PAN-OS",
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "timestamp",
+        "target": "timestamp",
+        "source": null,
+        "sources": [
+          "time_generated",
+          "receive_time"
+        ],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": [
+          "%Y/%m/%d %H:%M:%S",
+          "%Y-%m-%d %H:%M:%S",
+          "%Y/%m/%d %H:%M:%S.%f",
+          "%Y-%m-%d %H:%M:%S.%f"
+        ]
+      },
+      {
+        "op": "clean",
+        "target": "src_ip",
+        "source": "src",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "dst_ip",
+        "source": "dst",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "protocol",
+        "target": "protocol",
+        "source": "proto",
+        "sources": [],
+        "value": null,
+        "mapping": {
+          "6": "TCP",
+          "17": "UDP",
+          "1": "ICMP",
+          "58": "ICMPV6"
+        },
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "port",
+        "target": "src_port",
+        "source": "sport",
+        "sources": [],
+        "value": null,
+        "mapping": {
+          "6": "TCP",
+          "17": "UDP",
+          "1": "ICMP",
+          "58": "ICMPV6"
+        },
+        "protocol_source": "proto",
+        "formats": []
+      },
+      {
+        "op": "port",
+        "target": "dst_port",
+        "source": "dport",
+        "sources": [],
+        "value": null,
+        "mapping": {
+          "6": "TCP",
+          "17": "UDP",
+          "1": "ICMP",
+          "58": "ICMPV6"
+        },
+        "protocol_source": "proto",
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "user",
+        "source": "srcuser",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "action",
+        "source": "action",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "reason",
+        "source": "session_end_reason",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "object_name",
+        "source": "rule",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "constant_if_present",
+        "target": "object_type",
+        "source": "rule",
+        "sources": [],
+        "value": "SECURITY_RULE",
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "nat_ip",
+        "target": "details.nat_src_ip",
+        "source": "natsrc",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "nat_ip",
+        "target": "details.nat_dst_ip",
+        "source": "natdst",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "nat_port",
+        "target": "details.nat_src_port",
+        "source": "natsport",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "nat_port",
+        "target": "details.nat_dst_port",
+        "source": "natdport",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.application",
+        "source": "app",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.url_category",
+        "source": "category",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.dst_user",
+        "source": "dstuser",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.rule",
+        "source": "rule",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.action_source",
+        "source": "action_source",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.rule_uuid",
+        "source": "rule_uuid",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.policy_id",
+        "source": "policy_id",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.source_zone",
+        "source": "from_zone",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.destination_zone",
+        "source": "to_zone",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.inbound_interface",
+        "source": "inbound_if",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.outbound_interface",
+        "source": "outbound_if",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.source_location",
+        "source": "srcloc",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.destination_location",
+        "source": "dstloc",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.session_id",
+        "source": "sessionid",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.repeat_count",
+        "source": "repeatcnt",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "timestamp",
+        "target": "details.start_time",
+        "source": null,
+        "sources": [
+          "start"
+        ],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": [
+          "%Y/%m/%d %H:%M:%S",
+          "%Y-%m-%d %H:%M:%S",
+          "%Y/%m/%d %H:%M:%S.%f",
+          "%Y-%m-%d %H:%M:%S.%f"
+        ]
+      },
+      {
+        "op": "to_int",
+        "target": "details.elapsed_seconds",
+        "source": "elapsed",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.session_end_reason",
+        "source": "session_end_reason",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.bytes_total",
+        "source": "bytes",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.bytes_sent",
+        "source": "bytes_sent",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.bytes_received",
+        "source": "bytes_received",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.packets_total",
+        "source": "packets",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.packets_sent",
+        "source": "pkts_sent",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.packets_received",
+        "source": "pkts_received",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.virtual_system",
+        "source": "vsys",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.device_name",
+        "source": "device_name",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.serial_number",
+        "source": "serial",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.sequence_number",
+        "source": "seqno",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      }
+    ],
+    "preserve_vendor_fields": true
+  },
+  "ocsf_binding": {
+    "status": "deferred",
+    "mappings": {}
+  },
+  "tests": [
+    {
+      "name": "session-start",
+      "raw_subtype": "start",
+      "action": "allow",
+      "expected_type": "SESSION",
+      "expected_subtype": "SESSION_START",
+      "expected_outcome": "SUCCESS"
+    },
+    {
+      "name": "session-end",
+      "raw_subtype": "end",
+      "action": "allow",
+      "expected_type": "SESSION",
+      "expected_subtype": "SESSION_END",
+      "expected_outcome": "SUCCESS"
+    },
+    {
+      "name": "traffic-drop",
+      "raw_subtype": "drop",
+      "action": "deny",
+      "expected_type": "POLICY",
+      "expected_subtype": "TRAFFIC_DROP",
+      "expected_outcome": "FAILURE"
+    },
+    {
+      "name": "traffic-deny",
+      "raw_subtype": "deny",
+      "action": "reset-both",
+      "expected_type": "POLICY",
+      "expected_subtype": "TRAFFIC_DENY",
+      "expected_outcome": "FAILURE"
+    }
+  ],
+  "provenance": {
+    "source": "AegisGuard-ULPF existing PAN-OS Traffic parser",
+    "derived_from": "src/aegisguard_ulpf/parsing/vendors/palaalto/panos/traffic.py",
+    "created_for": "Semantic Pack Runtime v1 equivalence proof",
+    "notes": "Declarative representation of the existing PAN-OS Traffic legacy semantic output. OCSF binding and real digital signing are intentionally deferred."
+  },
+  "sensitivity": null
+}
