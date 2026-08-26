@@ -310,6 +310,19 @@ def test_pack_ocsf_binding_is_honest(pack):
     )
 
 
+def test_pack_sensitivity_metadata_is_honest(pack):
+    assert pack.sensitivity is not None
+    assert {
+        field.field_path: field.classification
+        for field in pack.sensitivity.fields
+    } == {
+        "src_endpoint.ip": "network_identifier",
+        "dst_endpoint.ip": "network_identifier",
+        "actor.user": "personal_identifier",
+        "details.dst_user": "personal_identifier",
+    }
+
+
 def test_pack_signature_state_is_honest(pack):
     signature = (
         pack.manifest.signature
@@ -324,7 +337,7 @@ def test_pack_signature_state_is_honest(pack):
 
     assert (
         signature.key_id
-        == "aegisguard-dev-v2"
+        == "aegisguard-dev-v3"
     )
 
     assert signature.value

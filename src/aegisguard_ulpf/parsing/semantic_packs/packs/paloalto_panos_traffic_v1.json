@@ -10,8 +10,8 @@
     "signature": {
       "status": "signed",
       "algorithm": "ed25519",
-      "key_id": "aegisguard-dev-v2",
-      "value": "K6BRVWGD3FU8qq7QuB3xj1Ler9R+RQsLmQp0vJAhpxb+kBLOOlAF7ZRDD8qGIfsD+1nVzYbpKVtnZaAErWRNDQ=="
+      "key_id": "aegisguard-dev-v3",
+      "value": "DOA7M1fFv3vmK0zH5R2DScumZG7Sw8Zm0sYr24gvC/435BAYVfE5K3NCH7EK+3+u9E/GFTwvffLb1Ha0YDZ4AA=="
     }
   },
   "syntax": {
@@ -686,5 +686,28 @@
     "created_for": "Semantic Pack Runtime v1 equivalence proof",
     "notes": "Declarative representation of the existing PAN-OS Traffic legacy semantic output with a verified OCSF Network Activity binding."
   },
-  "sensitivity": null
+  "sensitivity": {
+    "fields": [
+      {
+        "field_path": "src_endpoint.ip",
+        "semantic_role": "source_network_address",
+        "classification": "network_identifier"
+      },
+      {
+        "field_path": "dst_endpoint.ip",
+        "semantic_role": "destination_network_address",
+        "classification": "network_identifier"
+      },
+      {
+        "field_path": "actor.user",
+        "semantic_role": "source_user",
+        "classification": "personal_identifier"
+      },
+      {
+        "field_path": "details.dst_user",
+        "semantic_role": "destination_user",
+        "classification": "personal_identifier"
+      }
+    ]
+  }
 }
