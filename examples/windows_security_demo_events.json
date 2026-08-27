@@ -1,0 +1,26 @@
+[
+  {
+    "EventID": 4625,
+    "TargetUserName": "admin",
+    "IpAddress": "10.0.0.5",
+    "Computer": "WIN-DEMO",
+    "LogonType": 3,
+    "Status": "0xC000006D",
+    "FailureReason": "Unknown user name or bad password"
+  },
+  {
+    "EventID": 4624,
+    "TargetUserName": "admin",
+    "IpAddress": "10.0.0.5",
+    "Computer": "WIN-DEMO",
+    "LogonType": 3
+  },
+  {
+    "EventID": 4688,
+    "SubjectUserName": "admin",
+    "Computer": "WIN-DEMO",
+    "NewProcessName": "C:\\Windows\\System32\\cmd.exe",
+    "CommandLine": "cmd.exe /c whoami",
+    "NewProcessId": "1234"
+  }
+]
