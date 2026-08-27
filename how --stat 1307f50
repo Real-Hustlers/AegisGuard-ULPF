@@ -1,0 +1,30 @@
+* [33m7465721[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/final-sih-integration[m[33m, [m[1;31morigin/feature/final-sih-integration[m[33m)[m feat(demo): add final SIH demonstration runner
+* [33m73b88d6[m[33m ([m[1;33mtag: [m[1;33mv1.0-sih-ready[m[33m, [m[1;33mtag: [m[1;33mv1.0-final-integration[m[33m)[m fix(semantic-pack): align PAN-OS runtime severity mapping
+* [33m1307f50[m[33m ([m[1;31morigin/feature/adaptive-unknown-log-handling[m[33m, [m[1;32mfeature/adaptive-unknown-log-handling[m[33m)[m feat(traceability): add hash chain verification CLI
+* [33m932b904[m[33m ([m[1;31morigin/feature/fidelity-measurement[m[33m, [m[1;32mfeature/fidelity-measurement[m[33m)[m feat(fidelity): add mapping fidelity measurement
+[31m|[m * [33mb6b855f[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m README.md added
+[31m|[m *   [33m67f1871[m Merge pull request #18 from Real-Hustlers/feature/docker-airgap-packaging
+[31m|[m [33m|[m[31m\[m  
+[31m|[m [33m|[m[31m/[m  
+[31m|[m[31m/[m[33m|[m   
+* [33m|[m [33me544b1d[m[33m ([m[1;33mtag: [m[1;33mv1.0-demo-ready[m[33m, [m[1;31morigin/feature/docker-airgap-packaging[m[33m, [m[1;32mfeature/docker-airgap-packaging[m[33m)[m feat(demo): finalize SIH end-to-end demonstration pipeline
+* [33m|[m [33mfe813b3[m feat(demo): add multivendor pipeline demonstration
+* [33m|[m [33m5a0ce85[m fix(parser): correct Cisco ASA source destination mapping
+* [33m|[m [33ma9854e3[m[33m ([m[1;33mtag: [m[1;33mulpf-build14-demo-v1[m[33m)[m feat(demo): add Windows to OCSF to SIEM end-to-end flow
+* [33m|[m [33m4ceef6a[m feat(integration): add SIEM contract mapping and runtime validation
+* [33m|[m [33mcc21b7c[m[33m ([m[1;33mtag: [m[1;33mulpf-ocsf-windows-v1[m[33m)[m feat(windows): add Windows Security OCSF mappings
+* [33m|[m [33ma19c2a8[m feat(ingestion): add Windows Security Event adapter
+* [33m|[m [33m9f5ae5d[m chore: ignore generated demo artifacts
+* [33m|[m [33mbc386cd[m feat(demo): connect ULPF OCSF output to SIEM adapter
+* [33m|[m [33m507fa64[m feat(integration): add OCSF to SIEM adapter contract
+[34m|[m *   [33m30c0272[m Merge pull request #17 from Real-Hustlers/feature/docker-airgap-packaging
+[34m|[m [35m|[m[34m\[m  
+[34m|[m [35m|[m[34m/[m  
+[34m|[m[34m/[m[35m|[m   
+* [35m|[m [33m2672e36[m feat(demo): integrate end-to-end OCSF pipeline
+[36m|[m *   [33mb29620c[m Merge pull request #16 from Real-Hustlers/feature/docker-airgap-packaging
+[36m|[m [1;31m|[m[36m\[m  
+[36m|[m [1;31m|[m[36m/[m  
+[36m|[m[36m/[m[1;31m|[m   
+* [1;31m|[m [33m1606de4[m feat(packaging): add Docker and air-gap release tooling
+[1;31m|[m[1;31m/[m  

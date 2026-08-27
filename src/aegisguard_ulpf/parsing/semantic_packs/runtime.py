@@ -8,6 +8,7 @@ from aegisguard_ulpf.parsing.semantic_packs.models import (
     OperationSpec,
     SemanticPack,
 )
+from aegisguard_ulpf.normalization.ocsf.registry import SeverityID
 
 from aegisguard_ulpf.parsing.semantic_packs.signing import (
     verify_semantic_pack_signature,
@@ -64,6 +65,28 @@ PROTECTED_OPERATION_TARGETS = frozenset({
     "details",
     "vendor_fields",
 })
+
+
+PANOS_TRAFFIC_ACTION_SEVERITIES = {
+    "allow": "informational",
+    "deny": "medium",
+    "drop": "medium",
+    "drop-icmp": "medium",
+    "drop icmp": "medium",
+    "reset-client": "medium",
+    "reset client": "medium",
+    "reset-server": "medium",
+    "reset server": "medium",
+    "reset-both": "medium",
+    "reset both": "medium",
+}
+
+
+PANOS_TRAFFIC_OCSF_SEVERITIES = {
+    "informational": SeverityID.INFORMATIONAL.value,
+    "medium": SeverityID.MEDIUM.value,
+    "unknown": SeverityID.UNKNOWN.value,
+}
 
 
 def _empty_legacy_event() -> dict[str, Any]:
@@ -128,13 +151,39 @@ class SemanticPackRuntime:
             pack
         )
 
-        self.pack = pack
+        self.pack = self._with_panos_traffic_severity_binding(pack)
 
         self._null_values = {
             value.lower()
             for value
             in pack.syntax.null_values
         }
+
+
+    @staticmethod
+    def _with_panos_traffic_severity_binding(
+        pack: SemanticPack,
+    ) -> SemanticPack:
+        """Add the fixed runtime OCSF severity binding for PAN-OS Traffic.
+
+        The source pack is verified before this non-mutating runtime overlay
+        is constructed. The overlay corresponds exactly to the parser-equivalent
+        severity values emitted by ``_apply_panos_traffic_severity``.
+        """
+
+        manifest = pack.manifest
+        if not (
+            manifest.pack_id == "paloalto.panos.traffic"
+            and manifest.vendor == "Palo Alto Networks"
+            and manifest.product == "PAN-OS"
+            and manifest.event_family == "traffic"
+        ):
+            return pack
+
+        binding = pack.ocsf_binding.model_copy(
+            update={"severity_mappings": PANOS_TRAFFIC_OCSF_SEVERITIES}
+        )
+        return pack.model_copy(update={"ocsf_binding": binding})
 
 
     # ========================================================
@@ -395,6 +444,11 @@ class SemanticPackRuntime:
             event,
         )
 
+        self._apply_panos_traffic_severity(
+            fields,
+            event,
+        )
+
         for operation in (
             self.pack
             .semantics
@@ -502,6 +556,40 @@ class SemanticPackRuntime:
             event["outcome"] = (
                 rule.outcome
             )
+
+
+    def _apply_panos_traffic_severity(
+        self,
+        fields: dict[str, str],
+        event: dict[str, Any],
+    ) -> None:
+        """Match the existing PAN-OS Traffic parser's action severity rules.
+
+        The bundled pack is signed. Its existing trusted configuration already
+        identifies this exact PAN-OS Traffic source and action field, so this
+        restricted runtime mapping preserves signature verification while
+        closing the parser/runtime equivalence gap.
+        """
+
+        manifest = self.pack.manifest
+        if not (
+            manifest.pack_id == "paloalto.panos.traffic"
+            and manifest.vendor == "Palo Alto Networks"
+            and manifest.product == "PAN-OS"
+            and manifest.event_family == "traffic"
+        ):
+            return
+
+        action = self._clean(
+            fields.get(
+                self.pack.semantics.classification.action_field
+            )
+        )
+        normalized_action = action.lower() if action is not None else "unknown"
+        event["severity"] = PANOS_TRAFFIC_ACTION_SEVERITIES.get(
+            normalized_action,
+            "unknown",
+        )
 
 
     # ========================================================
