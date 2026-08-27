@@ -9,6 +9,9 @@ BASE_EVENT_CATEGORY_UID = 0
 FILE_SYSTEM_ACTIVITY_CLASS_UID = 1001
 FILE_SYSTEM_ACTIVITY_CATEGORY_UID = 1
 
+PROCESS_ACTIVITY_CLASS_UID = 1007
+PROCESS_ACTIVITY_CATEGORY_UID = 1
+
 DETECTION_FINDING_CLASS_UID = 2004
 DETECTION_FINDING_CATEGORY_UID = 2
 
@@ -38,6 +41,13 @@ class AuthenticationActivityID(IntEnum):
     UNKNOWN = 0
     LOGON = 1
     LOGOFF = 2
+    OTHER = 99
+
+
+class ProcessActivityID(IntEnum):
+    UNKNOWN = 0
+    LAUNCH = 1
+    TERMINATE = 2
     OTHER = 99
 
 
@@ -86,6 +96,11 @@ VERIFIED_CLASSES = {
         "category_name": "System Activity",
         "class_name": "File System Activity",
     },
+    PROCESS_ACTIVITY_CLASS_UID: {
+        "category_uid": PROCESS_ACTIVITY_CATEGORY_UID,
+        "category_name": "System Activity",
+        "class_name": "Process Activity",
+    },
     DETECTION_FINDING_CLASS_UID: {
         "category_uid": DETECTION_FINDING_CATEGORY_UID,
         "category_name": "Findings",
@@ -119,6 +134,12 @@ VERIFIED_ACTIVITY_NAMES = {
         5: "Refuse",
         6: "Traffic",
         7: "Listen",
+        99: "Other",
+    },
+    PROCESS_ACTIVITY_CLASS_UID: {
+        0: "Unknown",
+        1: "Launch",
+        2: "Terminate",
         99: "Other",
     },
     AUTHENTICATION_CLASS_UID: {

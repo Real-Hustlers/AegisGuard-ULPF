@@ -156,6 +156,34 @@ class OCSFValidator:
             elif not any(product.get(key) for key in ("name", "uid")):
                 errors.append("metadata.product must contain name or uid")
 
+        observables = event.get("observables")
+        if observables is not None:
+            if not isinstance(observables, list):
+                errors.append("observables must be a list")
+            else:
+                for index, observable in enumerate(observables):
+                    if not isinstance(observable, dict):
+                        errors.append(
+                            f"observable at index {index} must be a dictionary"
+                        )
+                        continue
+                    if not isinstance(observable.get("name"), str):
+                        errors.append(
+                            f"observable at index {index} requires string name"
+                        )
+                    if not self._is_integer(observable.get("type_id")):
+                        errors.append(
+                            f"observable at index {index} requires integer type_id"
+                        )
+                    if not isinstance(observable.get("value"), str):
+                        errors.append(
+                            f"observable at index {index} requires string value"
+                        )
+
+        unmapped = event.get("unmapped")
+        if unmapped is not None and not isinstance(unmapped, dict):
+            errors.append("unmapped must be a dictionary")
+
         return OCSFValidationResult(
             valid=not errors,
             errors=errors,

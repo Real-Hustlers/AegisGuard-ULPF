@@ -1,0 +1,39 @@
+{
+  "activity_id": 1,
+  "activity_name": "Launch",
+  "actor": {
+    "user": {
+      "name": "administrator"
+    }
+  },
+  "category_name": "System Activity",
+  "category_uid": 1,
+  "class_name": "Process Activity",
+  "class_uid": 1007,
+  "device": {
+    "hostname": "WORKSTATION-02"
+  },
+  "metadata": {
+    "product": {
+      "name": "Windows Security",
+      "vendor_name": "Microsoft"
+    },
+    "version": "1.9.0"
+  },
+  "observables": [],
+  "process": {
+    "cmd_line": "cmd.exe /c whoami",
+    "name": "cmd.exe",
+    "pid": 1234
+  },
+  "raw_data": "{\"CommandLine\":\"cmd.exe /c whoami\",\"Computer\":\"WORKSTATION-02\",\"EventID\":4688,\"NewProcessId\":\"1234\",\"NewProcessName\":\"C:\\\\Windows\\\\System32\\\\cmd.exe\",\"SubjectUserName\":\"administrator\",\"TimeCreated\":\"2026-08-27T09:32:00Z\",\"TokenElevationType\":\"%%1936\"}",
+  "severity_id": 1,
+  "status_id": 1,
+  "time": 1787823120000,
+  "type_uid": 100701,
+  "unmapped": {
+    "windows_security": {
+      "TokenElevationType": "%%1936"
+    }
+  }
+}
