@@ -1,0 +1,45 @@
+{
+  "activity_id": 1,
+  "activity_name": "Logon",
+  "category_name": "Identity & Access Management",
+  "category_uid": 3,
+  "class_name": "Authentication",
+  "class_uid": 3002,
+  "device": {
+    "hostname": "SERVER-01"
+  },
+  "logon_type": "3",
+  "metadata": {
+    "product": {
+      "name": "Windows Security",
+      "vendor_name": "Microsoft"
+    },
+    "version": "1.9.0"
+  },
+  "observables": [
+    {
+      "name": "src_endpoint.ip",
+      "type_id": 2,
+      "value": "10.0.0.5"
+    }
+  ],
+  "raw_data": "{\"Computer\":\"SERVER-01\",\"EventID\":4625,\"FailureReason\":\"Unknown user name or bad password.\",\"LogonType\":3,\"SourceIP\":\"10.0.0.5\",\"TimeCreated\":\"2026-08-27T09:31:00Z\",\"User\":\"test\"}",
+  "service": {
+    "name": "Windows Security"
+  },
+  "severity_id": 2,
+  "src_endpoint": {
+    "ip": "10.0.0.5"
+  },
+  "status_id": 2,
+  "time": 1787823060000,
+  "type_uid": 300201,
+  "unmapped": {
+    "windows_security": {
+      "FailureReason": "Unknown user name or bad password."
+    }
+  },
+  "user": {
+    "name": "test"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "activity_id": 1,
+  "activity_name": "Logon",
+  "category_name": "Identity & Access Management",
+  "category_uid": 3,
+  "class_name": "Authentication",
+  "class_uid": 3002,
+  "device": {
+    "hostname": "WORKSTATION-01"
+  },
+  "logon_type": "3",
+  "metadata": {
+    "product": {
+      "name": "Windows Security",
+      "vendor_name": "Microsoft"
+    },
+    "version": "1.9.0"
+  },
+  "observables": [
+    {
+      "name": "src_endpoint.ip",
+      "type_id": 2,
+      "value": "10.0.0.4"
+    }
+  ],
+  "raw_data": "{\"AuthenticationPackageName\":\"Negotiate\",\"Computer\":\"WORKSTATION-01\",\"EventID\":4624,\"IpAddress\":\"10.0.0.4\",\"LogonType\":3,\"TargetUserName\":\"alice\",\"TimeCreated\":\"2026-08-27T09:30:00Z\"}",
+  "service": {
+    "name": "Windows Security"
+  },
+  "severity_id": 1,
+  "src_endpoint": {
+    "ip": "10.0.0.4"
+  },
+  "status_id": 1,
+  "time": 1787823000000,
+  "type_uid": 300201,
+  "unmapped": {
+    "windows_security": {
+      "AuthenticationPackageName": "Negotiate"
+    }
+  },
+  "user": {
+    "name": "alice"
+  }
+}

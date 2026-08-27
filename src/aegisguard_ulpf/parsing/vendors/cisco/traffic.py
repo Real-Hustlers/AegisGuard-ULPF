@@ -91,9 +91,9 @@ def parse_connection_start(event_id, message, event):
         r"Built\s+(?P<direction>inbound|outbound)\s+"
         r"(?P<protocol>TCP|UDP)\s+connection\s+"
         r"(?P<connection_id>\d+)\s+for\s+"
-        r"(?P<dst_interface>[^:]+):(?P<dst_ip>[^/]+)/(?P<dst_port>\d+)"
-        r"(?:\s+\([^)]+\))?\s+to\s+"
         r"(?P<src_interface>[^:]+):(?P<src_ip>[^/]+)/(?P<src_port>\d+)"
+        r"(?:\s+\([^)]+\))?\s+to\s+"
+        r"(?P<dst_interface>[^:]+):(?P<dst_ip>[^/]+)/(?P<dst_port>\d+)"
         r"(?:\s+\([^)]+\))?",
         message,
         re.IGNORECASE
@@ -107,8 +107,10 @@ def parse_connection_start(event_id, message, event):
     event["protocol"] = match.group("protocol").upper()
     event["action"] = "connection_built"
 
+    # Correct source/destination mapping
     event["src_ip"] = match.group("src_ip")
     event["src_port"] = int(match.group("src_port"))
+
     event["dst_ip"] = match.group("dst_ip")
     event["dst_port"] = int(match.group("dst_port"))
 
@@ -123,7 +125,6 @@ def parse_connection_start(event_id, message, event):
     }
 
     return True
-
 
 def parse_connection_end(event_id, message, event):
     match = re.match(

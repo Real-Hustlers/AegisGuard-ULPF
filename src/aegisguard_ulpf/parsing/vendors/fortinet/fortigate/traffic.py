@@ -94,6 +94,39 @@ def derive_outcome(action):
     return None
 
 
+def derive_type(row):
+    """Return the FortiGate record type, including traffic-only inputs."""
+
+    event_type = empty_to_none(row.get("type"))
+
+    if event_type is not None:
+        return event_type
+
+    subtype = empty_to_none(row.get("subtype"))
+
+    if subtype is not None:
+        return subtype
+
+    return "traffic"
+
+
+def derive_severity(level, action):
+    """Preserve FortiGate level or derive a conservative traffic severity."""
+
+    severity = empty_to_none(level)
+
+    if severity is not None:
+        return severity
+
+    if action == "deny":
+        return "low"
+
+    if action in {"allow", "close", "start"}:
+        return "informational"
+
+    return "unknown"
+
+
 def build_timestamp(row):
     date = empty_to_none(row.get("date"))
     time = empty_to_none(row.get("time"))
@@ -203,11 +236,11 @@ def convert_row(row, record_number):
         "product": "FortiGate",
 
         "category": "network_activity",
-        "type": empty_to_none(row.get("type")),
+        "type": derive_type(row),
         "subtype": empty_to_none(row.get("subtype")),
         "outcome": derive_outcome(action),
 
-        "severity": empty_to_none(row.get("level")),
+        "severity": derive_severity(row.get("level"), action),
 
         "src_ip": empty_to_none(row.get("srcip")),
         "src_port": to_int(row.get("srcport")),

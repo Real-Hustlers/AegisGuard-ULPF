@@ -1,0 +1,27 @@
+{
+  "event_id": "EVT-WINDOWS-SAMPLE-001",
+  "ingested_at": "2026-08-27T09:30:01Z",
+  "raw": "{\"Channel\":\"Security\",\"Computer\":\"WIN-SEC-01\",\"EventData\":{\"FailureReason\":\"Unknown user name or bad password.\",\"LogonType\":3},\"EventID\":4625,\"IP\":\"10.0.0.5\",\"TimeCreated\":\"2026-08-27T09:30:00Z\",\"User\":\"admin\"}",
+  "transport": "windows_event_log",
+  "metadata": {
+    "source": {
+      "vendor": "Microsoft",
+      "product": "Windows Security",
+      "type": "event_log"
+    },
+    "raw_event": {
+      "EventID": 4625,
+      "TimeCreated": "2026-08-27T09:30:00Z",
+      "Computer": "WIN-SEC-01",
+      "User": "admin",
+      "IP": "10.0.0.5",
+      "Channel": "Security",
+      "EventData": {
+        "FailureReason": "Unknown user name or bad password.",
+        "LogonType": 3
+      }
+    }
+  },
+  "evidence_raw_id": null,
+  "raw_sha256": null
+}
