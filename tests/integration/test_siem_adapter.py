@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from aegisguard_ulpf.integration.siem_adapter import (
     SIEM_MERGED_LOGS_FILENAME,
@@ -102,3 +103,40 @@ def test_output_is_valid_json_array_for_every_ocsf_input_event(tmp_path):
         "EVT-ULPF-001",
         "EVT-ULPF-002",
     ]
+
+
+def test_windows_authentication_ocsf_uses_top_level_user_without_changing_contract():
+    repository_root = Path(__file__).resolve().parents[2]
+    original = json.loads(
+        (repository_root / "examples" / "windows_ocsf_4625.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+    mapped = map_ocsf_event_to_siem(original)
+
+    assert mapped["timestamp"] == "2026-08-27T09:31:00Z"
+    assert mapped["severity"] == "low"
+    assert mapped["vendor"] == "Microsoft"
+    assert mapped["product"] == "Windows Security"
+    assert mapped["source_ip"] == "10.0.0.5"
+    assert mapped["user"] == "test"
+    assert mapped["hostname"] == "SERVER-01"
+    assert mapped["event_id"] is None
+    assert mapped["raw_id"] is None
+    assert mapped["ulpf_original_event"] == original
+
+
+def test_documented_ocsf_import_example_matches_adapter_output(tmp_path):
+    repository_root = Path(__file__).resolve().parents[2]
+    input_path = repository_root / "examples" / "ocsf_siem_import_input.jsonl"
+    expected_path = repository_root / "examples" / "ocsf_siem_import_output.json"
+
+    output_path = adapt_ocsf_jsonl_to_siem(
+        input_path,
+        tmp_path / SIEM_MERGED_LOGS_FILENAME,
+    )
+
+    assert json.loads(output_path.read_text(encoding="utf-8")) == json.loads(
+        expected_path.read_text(encoding="utf-8")
+    )

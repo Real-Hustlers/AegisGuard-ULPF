@@ -81,6 +81,17 @@ def _actor_user(actor: dict[str, Any]) -> str | None:
     return _string_or_none(user)
 
 
+def _ocsf_user(
+    ocsf_event: dict[str, Any],
+    actor: dict[str, Any],
+) -> str | None:
+    """Return the user identity for both OCSF IAM and actor-based events."""
+
+    user = _mapping(ocsf_event.get("user"))
+    user_name = _string_or_none(user.get("name"))
+    return user_name if user_name is not None else _actor_user(actor)
+
+
 def map_ocsf_event_to_siem(
     ocsf_event: dict[str, Any],
 ) -> dict[str, Any]:
@@ -116,7 +127,7 @@ def map_ocsf_event_to_siem(
         "event_id": _string_or_none(raw_data.get("u_id")),
         "source_ip": _string_or_none(src_endpoint.get("ip")),
         "destination_ip": _string_or_none(dst_endpoint.get("ip")),
-        "user": _actor_user(actor),
+        "user": _ocsf_user(ocsf_event, actor),
         "hostname": hostname,
         "raw_id": _string_or_none(raw_data.get("raw_id")),
         "ulpf_original_event": ocsf_event,
