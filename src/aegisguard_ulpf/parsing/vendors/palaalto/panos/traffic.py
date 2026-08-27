@@ -380,6 +380,30 @@ def outcome_from_action(
     return "UNKNOWN"
 
 
+def normalized_action(
+    action: Optional[str]
+) -> str:
+    """Preserve a PAN-OS action or explicitly represent an absent value."""
+
+    return clean_value(action) or "unknown"
+
+
+def severity_from_action(
+    action: Optional[str]
+) -> str:
+    """Derive a stable traffic severity when PAN-OS has no severity field."""
+
+    normalized = normalized_action(action).lower()
+
+    if normalized in BLOCK_ACTIONS:
+        return "medium"
+
+    if normalized == "allow":
+        return "informational"
+
+    return "unknown"
+
+
 # ============================================================
 # TRAFFIC CLASSIFICATION
 # ============================================================
@@ -669,12 +693,9 @@ def normalize(
     )
 
 
-    # --------------------------------------------------------
-    # Traffic logs do not have a general severity field
-    # in the standard Traffic schema.
-    # --------------------------------------------------------
-
-    event["severity"] = None
+    # PAN-OS Traffic has no general severity field.  Derive a stable,
+    # conservative value from its action for consumers of this common format.
+    event["severity"] = severity_from_action(fields.get("action"))
 
 
     # --------------------------------------------------------
@@ -719,9 +740,7 @@ def normalize(
     # Action / Reason
     # --------------------------------------------------------
 
-    event["action"] = clean_value(
-        fields.get("action")
-    )
+    event["action"] = normalized_action(fields.get("action"))
 
     event["reason"] = clean_value(
         fields.get("session_end_reason")

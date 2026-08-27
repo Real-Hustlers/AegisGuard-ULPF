@@ -1,0 +1,119 @@
+{
+  "login_success": {
+    "EventID": 4624,
+    "TimeCreated": "2026-09-01T10:03:00Z",
+    "TargetUserName": "build5-user",
+    "IpAddress": "10.5.0.10",
+    "Computer": "BUILD5-WIN-01",
+    "LogonType": 3
+  },
+  "failed_login_sequence": [
+    {
+      "EventID": 4625,
+      "TimeCreated": "2026-09-01T10:00:00Z",
+      "TargetUserName": "build5-user",
+      "IpAddress": "10.5.0.10",
+      "Computer": "BUILD5-WIN-01",
+      "LogonType": 3,
+      "Status": "0xC000006D"
+    },
+    {
+      "EventID": 4625,
+      "TimeCreated": "2026-09-01T10:01:00Z",
+      "TargetUserName": "build5-user",
+      "IpAddress": "10.5.0.10",
+      "Computer": "BUILD5-WIN-01",
+      "LogonType": 3,
+      "Status": "0xC000006D"
+    },
+    {
+      "EventID": 4625,
+      "TimeCreated": "2026-09-01T10:02:00Z",
+      "TargetUserName": "build5-user",
+      "IpAddress": "10.5.0.10",
+      "Computer": "BUILD5-WIN-01",
+      "LogonType": 3,
+      "Status": "0xC000006D"
+    }
+  ],
+  "process_creation": {
+    "EventID": 4688,
+    "TimeCreated": "2026-09-01T10:04:00Z",
+    "SubjectUserName": "build5-user",
+    "Computer": "BUILD5-WIN-01",
+    "NewProcessName": "C:\\Windows\\System32\\cmd.exe",
+    "NewProcessId": "1234",
+    "CommandLine": "cmd.exe /c whoami"
+  },
+  "invalid_windows": {
+    "malformed_json": "{\"EventID\":4625",
+    "missing_event_id": {
+      "TimeCreated": "2026-09-01T10:05:00Z",
+      "TargetUserName": "build5-user",
+      "Computer": "BUILD5-WIN-01"
+    },
+    "missing_timestamp": {
+      "EventID": 4625,
+      "TargetUserName": "build5-user",
+      "IpAddress": "10.5.0.10",
+      "Computer": "BUILD5-WIN-01"
+    },
+    "corrupted_fields": {
+      "EventID": true,
+      "TimeCreated": "not-a-timestamp",
+      "TargetUserName": ["build5-user"],
+      "Computer": "BUILD5-WIN-01"
+    }
+  },
+  "invalid_ocsf": {
+    "missing_class_uid": {
+      "activity_id": 1,
+      "category_uid": 3,
+      "type_uid": 300201,
+      "severity_id": 1,
+      "time": 1788256800000,
+      "metadata": {
+        "version": "1.9.0",
+        "product": {
+          "vendor_name": "Microsoft",
+          "name": "Windows Security"
+        }
+      },
+      "raw_data": "{\"EventID\":4624}",
+      "status_id": 1
+    },
+    "missing_timestamp": {
+      "class_uid": 3002,
+      "activity_id": 1,
+      "category_uid": 3,
+      "type_uid": 300201,
+      "severity_id": 1,
+      "metadata": {
+        "version": "1.9.0",
+        "product": {
+          "vendor_name": "Microsoft",
+          "name": "Windows Security"
+        }
+      },
+      "raw_data": "{\"EventID\":4624}",
+      "status_id": 1
+    },
+    "invalid_severity": {
+      "class_uid": 3002,
+      "activity_id": 1,
+      "category_uid": 3,
+      "type_uid": 300201,
+      "severity_id": 42,
+      "time": 1788256800000,
+      "metadata": {
+        "version": "1.9.0",
+        "product": {
+          "vendor_name": "Microsoft",
+          "name": "Windows Security"
+        }
+      },
+      "raw_data": "{\"EventID\":4624}",
+      "status_id": 1
+    }
+  }
+}
