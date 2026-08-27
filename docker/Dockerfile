@@ -4,6 +4,7 @@ WORKDIR /build
 
 COPY pyproject.toml ./
 COPY src ./src
+COPY demo ./demo
 
 RUN python -m pip wheel --wheel-dir /wheelhouse .
 
@@ -14,6 +15,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
+
+COPY --from=builder /build/demo /app/demo
 
 COPY --from=builder /wheelhouse /wheelhouse
 
