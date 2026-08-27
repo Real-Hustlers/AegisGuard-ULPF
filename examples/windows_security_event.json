@@ -1,0 +1,12 @@
+{
+  "EventID": 4625,
+  "TimeCreated": "2026-08-27T09:30:00Z",
+  "Computer": "WIN-SEC-01",
+  "User": "admin",
+  "IP": "10.0.0.5",
+  "Channel": "Security",
+  "EventData": {
+    "FailureReason": "Unknown user name or bad password.",
+    "LogonType": 3
+  }
+}
