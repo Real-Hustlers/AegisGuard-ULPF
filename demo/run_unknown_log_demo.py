@@ -1,10 +1,11 @@
-from aegisguard_ulpf.fallback.tier0 import Tier0Fallback
 from aegisguard_ulpf.core.models import RawEvent, DetectionResult
+from aegisguard_ulpf.fallback.tier0 import Tier0Fallback
 
 
-def main():
+def main() -> None:
+    """Present the existing Tier-0 contract without adding semantics."""
 
-    print("\n=== AegisGuard-ULPF Tier-0 Unknown Log Demo ===\n")
+    print("\n=== Tier-0 Unknown Log Handling ===\n")
 
     raw_log = """
     {
@@ -33,29 +34,26 @@ def main():
 
     fields = result.fields
 
-    print("Input:")
-    print("Unknown vendor event")
+    if result.raw_event.raw != raw_log:
+        raise RuntimeError("Tier-0 did not retain the original raw log")
+    if any(
+        fields[name] is not None
+        for name in ("category", "type", "subtype", "outcome", "severity", "action")
+    ):
+        raise RuntimeError("Tier-0 must not infer security semantics")
 
-    print("\nRaw preservation:")
-    print("PASS" if result.raw_event else "FAIL")
-
-    print("\nVendor:")
-    print(fields["vendor"])
-
+    print("Raw preserved: PASS\n")
+    print("Vendor:")
+    print(fields["vendor"] or "unknown")
+    print("\nSecurity meaning:")
+    print("NOT INFERRED")
     print("\nMapping status:")
     print(fields["mapping_status"])
-
-    print("\nSecurity meaning:")
-    print(
-        fields["type"],
-        fields["subtype"],
-        fields["outcome"]
-    )
-
+    print("\nCoverage:")
+    print("0%")
     print("\nUnmapped fields:")
-    print(fields["vendor_fields"])
-
-    print("\nStatus:")
+    print("available" if fields["vendor_fields"] else "none")
+    print("\nResult:")
     print("LOG ACCEPTED WITHOUT LOSS")
 
 

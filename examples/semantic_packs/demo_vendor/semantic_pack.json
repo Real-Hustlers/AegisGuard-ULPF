@@ -1,0 +1,139 @@
+{
+  "manifest": {
+    "pack_id": "demo.vendor.firewall",
+    "pack_version": "1.0",
+    "schema_version": "aegisguard-common-event-v1",
+    "vendor": "DemoVendor",
+    "product": "DemoFirewall",
+    "event_family": "traffic",
+    "format_version": "demo-firewall-csv-v1",
+    "signature": {
+      "status": "signed",
+      "algorithm": "ed25519",
+      "key_id": "demo-vendor-v1",
+      "value": "EF6Hh+3d/ls8JJcynXfxRs3C+gl+ClyyDQzYTDxZyFq0d42zzhQJYBs3A2hNz1MK8O44fN/fzklz3SmUsNLGBA=="
+    }
+  },
+  "syntax": {
+    "input_format": "csv",
+    "payload_marker": "DEMO,",
+    "field_names": [
+      "record_type",
+      "event_kind",
+      "action",
+      "source_ip",
+      "destination_ip"
+    ],
+    "preserve_extra_fields": true,
+    "required_field": "record_type",
+    "required_value": "DEMO",
+    "null_values": [
+      "",
+      "n/a",
+      "na",
+      "none",
+      "null",
+      "-"
+    ]
+  },
+  "semantics": {
+    "classification": {
+      "source_field": "event_kind",
+      "action_field": "action",
+      "category": "network_activity",
+      "default_type": "UNKNOWN",
+      "default_subtype": "UNKNOWN",
+      "default_outcome": "UNKNOWN",
+      "rules": {
+        "traffic": {
+          "type": "SESSION",
+          "subtype": "SESSION_START",
+          "outcome": null,
+          "outcome_from_action": true
+        }
+      },
+      "action_outcomes": {
+        "allow": "SUCCESS",
+        "deny": "FAILURE"
+      }
+    },
+    "operations": [
+      {
+        "op": "constant",
+        "target": "vendor",
+        "source": null,
+        "sources": [],
+        "value": "DemoVendor",
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "constant",
+        "target": "product",
+        "source": null,
+        "sources": [],
+        "value": "DemoFirewall",
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "action",
+        "source": "action",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "src_ip",
+        "source": "source_ip",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "dst_ip",
+        "source": "destination_ip",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      }
+    ],
+    "preserve_vendor_fields": true
+  },
+  "ocsf_binding": {
+    "status": "deferred",
+    "class_uid": null,
+    "activity_mappings": {},
+    "status_mappings": {},
+    "severity_mappings": {},
+    "default_severity_id": null
+  },
+  "tests": [
+    {
+      "name": "demo-traffic-allow",
+      "raw_subtype": "traffic",
+      "action": "allow",
+      "expected_type": "SESSION",
+      "expected_subtype": "SESSION_START",
+      "expected_outcome": "SUCCESS"
+    }
+  ],
+  "provenance": {
+    "source": "AegisGuard-ULPF SIH demonstration",
+    "derived_from": "Declarative DemoVendor CSV contract",
+    "created_for": "Semantic Pack Architecture demonstration",
+    "notes": "Example data-only pack; its deferred OCSF binding makes no unverified OCSF claim."
+  },
+  "sensitivity": null
+}
