@@ -16,6 +16,9 @@ dependencies = [
     "cryptography>=42.0"
 ]
 
+[project.scripts]
+ulpf = "aegisguard_ulpf.cli.main:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
