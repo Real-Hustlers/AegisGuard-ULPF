@@ -21,6 +21,7 @@ from aegisguard_ulpf.normalization.ocsf.registry import (
 OperationName = Literal[
     "constant",
     "clean",
+    "map",
     "to_int",
     "protocol",
     "port",
@@ -119,10 +120,13 @@ class SyntaxSpec(FrozenPackModel):
     """
     Restricted structural extraction description.
 
-    Runtime v1 supports CSV only.
+    Runtime v1 supports restricted CSV and key-value extraction.
     """
 
-    input_format: Literal["csv"]
+    input_format: Literal[
+        "csv",
+        "key_value",
+    ]
 
     payload_marker: str = Field(
         min_length=1
@@ -183,6 +187,7 @@ class OperationSpec(FrozenPackModel):
 
         source_operations = {
             "clean",
+            "map",
             "to_int",
             "protocol",
             "nat_ip",
@@ -193,9 +198,18 @@ class OperationSpec(FrozenPackModel):
         if (
             self.op in source_operations
             and not self.source
+            and not (
+                self.op == "map"
+                and self.sources
+            )
         ):
             raise ValueError(
                 f"{self.op} operation requires source"
+            )
+
+        if self.op == "map" and not self.mapping:
+            raise ValueError(
+                "map operation requires mapping"
             )
 
         if self.op == "protocol":

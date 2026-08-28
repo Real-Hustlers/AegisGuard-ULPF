@@ -1,0 +1,11 @@
+services:
+  ulpf-runtime:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: aegisguard-ulpf:local
+    network_mode: none
+    entrypoint: ["python", "demo/run_demo.py"]
+    volumes:
+      - ./demo/output:/app/demo/output
+      - ./demo/evidence:/app/demo/evidence

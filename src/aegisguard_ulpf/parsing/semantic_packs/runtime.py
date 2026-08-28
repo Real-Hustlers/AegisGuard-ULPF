@@ -1,5 +1,6 @@
 import csv
 import io
+import shlex
 
 from datetime import datetime
 from typing import Any
@@ -18,6 +19,7 @@ from aegisguard_ulpf.parsing.semantic_packs.signing import (
 ALLOWED_OPERATIONS = frozenset({
     "constant",
     "clean",
+    "map",
     "to_int",
     "protocol",
     "port",
@@ -195,13 +197,14 @@ class SemanticPackRuntime:
         raw_log: str,
     ) -> dict[str, str]:
 
-        if (
-            self.pack.syntax.input_format
-            != "csv"
-        ):
+        if self.pack.syntax.input_format == "key_value":
+            return self._parse_key_value_fields(
+                raw_log
+            )
+
+        if self.pack.syntax.input_format != "csv":
             raise ValueError(
-                "Semantic Pack Runtime v1 "
-                "supports CSV syntax only"
+                "Unsupported Semantic Pack input format"
             )
 
         payload = self._extract_payload(
@@ -262,6 +265,70 @@ class SemanticPackRuntime:
             self.pack
             .syntax
             .required_value
+        )
+
+        if (
+            actual is None
+            or actual.upper()
+            != expected.upper()
+        ):
+            raise ValueError(
+                "Input does not satisfy Semantic "
+                "Pack syntax requirements"
+            )
+
+        return fields
+
+
+    def _parse_key_value_fields(
+        self,
+        raw_log: str,
+    ) -> dict[str, str]:
+        """Extract shell-style key=value tokens without executing content."""
+
+        if not isinstance(raw_log, str):
+            raise TypeError(
+                "raw_log must be a string"
+            )
+
+        if not raw_log.strip():
+            raise ValueError(
+                "raw_log is empty"
+            )
+
+        try:
+            tokens = shlex.split(
+                raw_log
+            )
+        except ValueError as exc:
+            raise ValueError(
+                "Malformed key-value Semantic Pack input"
+            ) from exc
+
+        fields: dict[str, str] = {}
+
+        for token in tokens:
+            if "=" not in token:
+                continue
+
+            key, value = token.split(
+                "=",
+                1,
+            )
+
+            key = key.strip()
+
+            if key:
+                fields[key] = value.strip()
+
+        required_field = (
+            self.pack.syntax.required_field
+        )
+        actual = self._clean(
+            fields.get(required_field)
+        )
+        expected = (
+            self.pack.syntax.required_value
         )
 
         if (
@@ -620,6 +687,31 @@ class SemanticPackRuntime:
                 )
             )
 
+        if op == "map":
+            selected = None
+
+            sources = (
+                operation.sources
+                or (operation.source,)
+            )
+
+            for source in sources:
+                value = self._clean(
+                    fields.get(source)
+                )
+
+                if value is not None:
+                    selected = value
+                    break
+
+            if selected is None:
+                return operation.value
+
+            return operation.mapping.get(
+                selected.lower(),
+                operation.value,
+            )
+
         if op == "to_int":
             return self._to_int(
                 fields.get(
@@ -647,23 +739,39 @@ class SemanticPackRuntime:
             )
 
         if op == "timestamp":
+            values = [
+                value
+                for source in operation.sources
+                if (
+                    value := self._clean(
+                        fields.get(source)
+                    )
+                ) is not None
+            ]
 
-            selected = None
-
-            for source in operation.sources:
-
-                value = fields.get(
-                    source
+            for value in values:
+                parsed = self._parse_known_timestamp(
+                    value,
+                    operation.formats,
                 )
+                if parsed is not None:
+                    return parsed
 
-                if value:
-                    selected = value
-                    break
+            if len(values) > 1:
+                candidates = [
+                    " ".join(values),
+                    values[0] + "T" + "".join(values[1:]),
+                ]
 
-            return self._parse_timestamp(
-                selected,
-                operation.formats,
-            )
+                for candidate in candidates:
+                    parsed = self._parse_known_timestamp(
+                        candidate,
+                        operation.formats,
+                    )
+                    if parsed is not None:
+                        return parsed
+
+            return values[0] if values else None
 
         if op == "nat_ip":
             return self._normalize_nat_ip(
@@ -906,11 +1014,30 @@ class SemanticPackRuntime:
         if not cleaned:
             return None
 
+        parsed = self._parse_known_timestamp(
+            cleaned,
+            formats,
+        )
+
+        if parsed is not None:
+            return parsed
+
+        # Preserve an unknown but usable timestamp
+        # exactly like the current PAN-OS parser.
+        return cleaned
+
+
+    @staticmethod
+    def _parse_known_timestamp(
+        value: str,
+        formats: tuple[str, ...],
+    ) -> str | None:
+
         for fmt in formats:
 
             try:
                 parsed = datetime.strptime(
-                    cleaned,
+                    value,
                     fmt,
                 )
 
@@ -919,6 +1046,4 @@ class SemanticPackRuntime:
             except ValueError:
                 continue
 
-        # Preserve an unknown but usable timestamp
-        # exactly like the current PAN-OS parser.
-        return cleaned
+        return None

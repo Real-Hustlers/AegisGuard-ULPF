@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-08-27T09:35:00.000000+0000",
+  "flow_id": 998877665544,
+  "event_type": "alert",
+  "src_ip": "10.0.0.50",
+  "src_port": 45678,
+  "dest_ip": "192.168.1.5",
+  "dest_port": 22,
+  "proto": "TCP",
+  "source": {
+    "vendor": "Suricata",
+    "product": "IDS"
+  },
+  "alert": {
+    "action": "allowed",
+    "signature_id": 2001219,
+    "rev": 20,
+    "signature": "ET SCAN Possible Port Scan",
+    "category": "Attempted Information Leak",
+    "severity": 2
+  }
+}

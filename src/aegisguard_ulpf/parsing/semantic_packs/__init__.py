@@ -12,6 +12,11 @@ from aegisguard_ulpf.parsing.semantic_packs.runtime import (
     SemanticPackRuntime,
 )
 
+from aegisguard_ulpf.parsing.semantic_packs.resolver import (
+    SemanticPackResolver,
+    default_fortigate_traffic_pack_path,
+)
+
 from aegisguard_ulpf.parsing.semantic_packs.signing import (
     canonical_pack_bytes,
     generate_ed25519_keypair,
@@ -24,7 +29,9 @@ __all__ = [
     "ALLOWED_OPERATIONS",
     "SemanticPack",
     "SemanticPackRuntime",
+    "SemanticPackResolver",
     "canonical_pack_bytes",
+    "default_fortigate_traffic_pack_path",
     "generate_ed25519_keypair",
     "load_semantic_pack",
     "semantic_pack_sha256",

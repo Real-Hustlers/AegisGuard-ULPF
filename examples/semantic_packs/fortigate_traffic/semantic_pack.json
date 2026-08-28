@@ -1,0 +1,414 @@
+{
+  "manifest": {
+    "pack_id": "fortinet.fortigate.traffic",
+    "pack_version": "1.0.0",
+    "schema_version": "aegisguard-common-event-v1",
+    "vendor": "Fortinet",
+    "product": "FortiGate",
+    "event_family": "traffic",
+    "format_version": "fortigate-key-value-v1",
+    "signature": {
+      "status": "signed",
+      "algorithm": "ed25519",
+      "key_id": "fortigate-traffic-v1",
+      "value": "+I0vK8GDTXjuCr1Cuau0C07TkOGMFYW1SX0m4a9fhcY5Sr7Gn+ymJhQd45ehctIFwBumxL7LPL83PYWkR41GAA=="
+    }
+  },
+  "syntax": {
+    "input_format": "key_value",
+    "payload_marker": "type=",
+    "field_names": [],
+    "preserve_extra_fields": true,
+    "required_field": "type",
+    "required_value": "traffic",
+    "null_values": [
+      "",
+      "n/a",
+      "na",
+      "none",
+      "null",
+      "-"
+    ]
+  },
+  "semantics": {
+    "classification": {
+      "source_field": "subtype",
+      "action_field": "action",
+      "category": "network_activity",
+      "default_type": "traffic",
+      "default_subtype": "unknown",
+      "default_outcome": "unknown",
+      "rules": {
+        "forward": {
+          "type": "traffic",
+          "subtype": "forward",
+          "outcome": null,
+          "outcome_from_action": true
+        },
+        "local": {
+          "type": "traffic",
+          "subtype": "local",
+          "outcome": null,
+          "outcome_from_action": true
+        },
+        "multicast": {
+          "type": "traffic",
+          "subtype": "multicast",
+          "outcome": null,
+          "outcome_from_action": true
+        },
+        "sniffer": {
+          "type": "traffic",
+          "subtype": "sniffer",
+          "outcome": null,
+          "outcome_from_action": true
+        },
+        "anomaly": {
+          "type": "traffic",
+          "subtype": "anomaly",
+          "outcome": null,
+          "outcome_from_action": true
+        }
+      },
+      "action_outcomes": {
+        "accept": "success",
+        "allow": "success",
+        "permit": "success",
+        "deny": "failure",
+        "drop": "failure",
+        "reject": "failure",
+        "close": "success",
+        "start": "success"
+      }
+    },
+    "operations": [
+      {
+        "op": "constant",
+        "target": "vendor",
+        "source": null,
+        "sources": [],
+        "value": "Fortinet",
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "constant",
+        "target": "product",
+        "source": null,
+        "sources": [],
+        "value": "FortiGate",
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "timestamp",
+        "target": "timestamp",
+        "source": null,
+        "sources": [
+          "date",
+          "time",
+          "tz"
+        ],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": [
+          "%Y-%m-%dT%H:%M:%S%z",
+          "%Y-%m-%dT%H:%M:%S",
+          "%Y-%m-%d %H:%M:%S %z",
+          "%Y-%m-%d %H:%M:%S"
+        ]
+      },
+      {
+        "op": "map",
+        "target": "action",
+        "source": "action",
+        "sources": [],
+        "value": "unknown",
+        "mapping": {
+          "accept": "allow",
+          "allow": "allow",
+          "permit": "allow",
+          "deny": "deny",
+          "drop": "deny",
+          "reject": "deny",
+          "close": "close",
+          "start": "start"
+        },
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "map",
+        "target": "severity",
+        "source": null,
+        "sources": [
+          "level",
+          "action"
+        ],
+        "value": "unknown",
+        "mapping": {
+          "emergency": "emergency",
+          "alert": "alert",
+          "critical": "critical",
+          "error": "error",
+          "warning": "warning",
+          "notice": "notice",
+          "information": "information",
+          "informational": "informational",
+          "debug": "debug",
+          "accept": "informational",
+          "allow": "informational",
+          "permit": "informational",
+          "deny": "low",
+          "drop": "low",
+          "reject": "low",
+          "close": "informational",
+          "start": "informational"
+        },
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "src_ip",
+        "source": "srcip",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "src_port",
+        "source": "srcport",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "dst_ip",
+        "source": "dstip",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "dst_port",
+        "source": "dstport",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "protocol",
+        "target": "protocol",
+        "source": "proto",
+        "sources": [],
+        "value": null,
+        "mapping": {
+          "1": "ICMP",
+          "6": "TCP",
+          "17": "UDP",
+          "47": "GRE",
+          "50": "ESP",
+          "51": "AH",
+          "58": "ICMPV6"
+        },
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "user",
+        "source": "user",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "vendor_event_id",
+        "source": "logid",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.device_name",
+        "source": "devname",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.device_id",
+        "source": "devid",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.source_interface",
+        "source": "srcintf",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.destination_interface",
+        "source": "dstintf",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.session_id",
+        "source": "sessionid",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.duration",
+        "source": "duration",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.bytes_sent",
+        "source": "sentbyte",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "to_int",
+        "target": "details.bytes_received",
+        "source": "rcvdbyte",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      },
+      {
+        "op": "clean",
+        "target": "details.policy_name",
+        "source": "policyname",
+        "sources": [],
+        "value": null,
+        "mapping": {},
+        "protocol_source": null,
+        "formats": []
+      }
+    ],
+    "preserve_vendor_fields": true
+  },
+  "ocsf_binding": {
+    "status": "bound",
+    "class_uid": 4001,
+    "activity_mappings": {
+      "traffic": 6
+    },
+    "status_mappings": {
+      "success": 1,
+      "failure": 2,
+      "unknown": 0
+    },
+    "severity_mappings": {
+      "emergency": 5,
+      "alert": 5,
+      "critical": 5,
+      "error": 4,
+      "warning": 3,
+      "notice": 2,
+      "information": 1,
+      "informational": 1,
+      "debug": 1,
+      "low": 2,
+      "unknown": 0
+    },
+    "default_severity_id": 0
+  },
+  "tests": [
+    {
+      "name": "fortigate-forward-accept",
+      "raw_subtype": "forward",
+      "action": "accept",
+      "expected_type": "traffic",
+      "expected_subtype": "forward",
+      "expected_outcome": "success"
+    },
+    {
+      "name": "fortigate-forward-deny",
+      "raw_subtype": "forward",
+      "action": "deny",
+      "expected_type": "traffic",
+      "expected_subtype": "forward",
+      "expected_outcome": "failure"
+    }
+  ],
+  "provenance": {
+    "source": "Fortinet FortiGate Traffic key-value event contract",
+    "derived_from": "Existing AegisGuard-ULPF FortiGate traffic parser behavior",
+    "created_for": "FortiGate Semantic Pack onboarding demonstration",
+    "notes": "Signed data-only mapping; contains no executable code and preserves all extracted vendor fields."
+  },
+  "sensitivity": {
+    "fields": [
+      {
+        "field_path": "src_endpoint.ip",
+        "semantic_role": "source network identifier",
+        "classification": "network_identifier"
+      },
+      {
+        "field_path": "dst_endpoint.ip",
+        "semantic_role": "destination network identifier",
+        "classification": "network_identifier"
+      },
+      {
+        "field_path": "actor.user",
+        "semantic_role": "source user identifier",
+        "classification": "personal_identifier"
+      }
+    ]
+  }
+}

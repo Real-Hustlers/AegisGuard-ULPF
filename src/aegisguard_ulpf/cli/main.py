@@ -60,6 +60,18 @@ def _verify_command(
     )
 
 
+def _trace_command(event_id: str, *, store_path: str) -> int:
+    store = RawEvidenceStore(Path(store_path))
+    record = store.get(event_id)
+    result = store.verify(event_id)
+    print("Raw event found:", "YES" if result["original_event_found"] else "NO")
+    if record is not None:
+        print("Source:", record.identity_context.get("source", "unknown"))
+    print("Hash:", "Verified" if result["integrity"] == "PASS" else "Failed")
+    print("Trace completed:", "PASS" if result["integrity"] == "PASS" else "FAIL")
+    return 0 if result["integrity"] == "PASS" else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
@@ -93,6 +105,9 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
 
+    trace_parser = subparsers.add_parser("trace", help="Trace a ULPF event to raw evidence")
+    trace_parser.add_argument("event_id", help="Deterministic ULPF event ID")
+    trace_parser.add_argument("--store", default="evidence", help="Raw evidence directory")
     return parser
 
 
@@ -107,6 +122,9 @@ def main() -> int:
             args.event_id,
             store_path=args.store,
         )
+
+    if args.command == "trace":
+        return _trace_command(args.event_id, store_path=args.store)
 
     parser.error(
         f"Unsupported command: {args.command}"

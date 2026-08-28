@@ -1,0 +1,19 @@
+{
+  "device": "PA-VM-EDGE-01",
+  "serial": "012345678901",
+  "timestamp": "2026/08/27 09:34:00",
+  "subtype": "end",
+  "src_ip": "192.168.1.20",
+  "dst_ip": "10.10.10.5",
+  "src_port": 55001,
+  "dst_port": 443,
+  "protocol": "tcp",
+  "action": "allow",
+  "rule": "Allow Web Application",
+  "source_zone": "trust",
+  "destination_zone": "dmz",
+  "application": "ssl",
+  "session_id": 445566,
+  "bytes": 8192,
+  "packets": 32
+}

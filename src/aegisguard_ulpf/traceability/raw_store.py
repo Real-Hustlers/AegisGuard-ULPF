@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import base64
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -509,6 +510,22 @@ class RawEvidenceStore:
             )
 
         return path.read_bytes()
+
+    def raw_event_envelope(self, event_id: str) -> dict[str, Any]:
+        """Return a lossless, JSON-safe raw evidence view."""
+        record = self.get(event_id)
+        if record is None:
+            raise KeyError(f"Unknown event_id: {event_id}")
+        return {
+            "raw_id": record.raw_id,
+            "timestamp": record.stored_at,
+            "source": str(record.identity_context.get("source", "unknown")),
+            "raw_content": base64.b64encode(self.read_raw(event_id)).decode("ascii"),
+            "raw_content_encoding": "base64",
+            "sha256": record.raw_sha256,
+            "previous_hash": record.previous_chain_hash,
+            "chain_hash": record.chain_hash,
+        }
 
     def _verify_chain_through(
         self,

@@ -1,0 +1,3 @@
+Aug 27 2026 09:32:00: %ASA-6-302013: Built outbound TCP connection 80421 for inside:192.168.10.25/51422 to outside:198.51.100.10/443
+Aug 27 2026 09:32:30: %ASA-4-106023: Deny tcp src outside:203.0.113.25/45122 dst inside:10.10.10.5/22 by access-group "OUTSIDE_IN"
+Aug 27 2026 09:33:00: %ASA-6-716001: Group <employees> User <alice> IP <198.51.100.24> WebVPN session started

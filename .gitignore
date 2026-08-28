@@ -40,3 +40,9 @@ demo/evidence/
 demo/output/
 
 demo/input/
+
+# Versioned inputs for the five-source SIH dashboard demonstration.
+!demo/input/
+demo/input/*
+!demo/input/multi_vendor/
+!demo/input/multi_vendor/**

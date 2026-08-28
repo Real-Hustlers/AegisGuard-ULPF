@@ -366,6 +366,7 @@ def test_allowed_operation_set_is_restricted():
     assert ALLOWED_OPERATIONS == {
         "constant",
         "clean",
+        "map",
         "to_int",
         "protocol",
         "port",
