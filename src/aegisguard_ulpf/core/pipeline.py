@@ -13,6 +13,9 @@ from aegisguard_ulpf.fallback.tier0 import (
 )
 from aegisguard_ulpf.detection.engine import DetectionEngine
 from aegisguard_ulpf.parsing.registry import ParserRegistry
+from aegisguard_ulpf.parsing.semantic_packs.resolver import (
+    SemanticPackResolver,
+)
 from aegisguard_ulpf.traceability.raw_store import RawEvidenceStore
 
 
@@ -40,6 +43,7 @@ class ProcessingPipeline:
         registry: ParserRegistry,
         detection_engine: DetectionEngine | None = None,
         tier0_fallback: Tier0Fallback | None = None,
+        semantic_pack_resolver: SemanticPackResolver | None = None,
     ) -> None:
         self.registry = registry
 
@@ -51,6 +55,11 @@ class ProcessingPipeline:
         self.tier0_fallback = (
             tier0_fallback
             or Tier0Fallback()
+        )
+
+        self.semantic_pack_resolver = (
+            semantic_pack_resolver
+            or SemanticPackResolver()
         )
 
     def detect(
@@ -69,7 +78,17 @@ class ProcessingPipeline:
             event
         )
 
-        if detection.parser_id is None:
+        parsed_event = (
+            self.semantic_pack_resolver.parse(
+                event,
+                detection,
+            )
+        )
+
+        if (
+            parsed_event is None
+            and detection.parser_id is None
+        ):
 
             parsed_event = (
                 self.tier0_fallback.parse(
@@ -78,7 +97,7 @@ class ProcessingPipeline:
                 )
             )
 
-        else:
+        elif parsed_event is None:
 
             # If detection explicitly selected a parser but
             # deployment/registry does not contain it, that is

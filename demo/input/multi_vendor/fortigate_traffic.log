@@ -1,0 +1,2 @@
+date=2026-08-27 time=09:30:00 tz=+0530 devname="FGT-EDGE-01" devid="FGT60FTK12345678" logid="0000000013" type="traffic" subtype="forward" level="notice" srcip=10.0.0.10 srcport=50000 dstip=8.8.8.8 dstport=53 proto=17 action="accept" sessionid=12345 policyname="DNS Access"
+date=2026-08-27 time=09:31:00 tz=+0530 devname="FGT-EDGE-01" devid="FGT60FTK12345678" logid="0000000014" type="traffic" subtype="forward" level="warning" srcip=10.0.0.55 srcport=51432 dstip=203.0.113.80 dstport=443 proto=6 action="deny" sessionid=12346 policyname="Block External"

@@ -1,0 +1,2 @@
+2026-08-27T09:36:00Z linux-app-01 sshd[4242]: Failed password for user admin from 10.0.0.15 port 49822 ssh2
+2026-08-27T09:37:00Z linux-app-01 sudo: deploy : TTY=pts/0 ; PWD=/srv/app ; USER=root ; COMMAND=/usr/bin/systemctl restart aegis-agent
